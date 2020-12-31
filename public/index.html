@@ -1,43 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <title>Instagram App</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '678961952622277',
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v9.0'
+        });
+          
+         
+  FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+  }); 
+  FB.api(
+          '/me/accounts',
+          'GET',
+          {},
+          function(response) {
+            console.log("fb")
+            const fbid=response.data[0].id
+            console.log(fbid)
+          }
+          ); 
+          FB.api(
+  '/106120181321696',
+  'GET',
+  {"fields":"instagram_business_account"},
+  function(response) {
+      // Insert your code here
+  }
+); 
+FB.api(
+  '/17841402073114275/media',
+  'GET',
+  {},
+  function(response) {
+      // Insert your code here
+  }
+);     
+      };
+    
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+  
+       function statusChangeCallback(response){
+           if(response.status === 'connected')
+           {
+               console.log('Logged in and authenticated');
+           }
+           else{
+               console.log('Not authenticated');
+           }
+       }
+  
+       
+          function checkLoginState() {
+          FB.getLoginStatus(function(response) {
+              statusChangeCallback(response);
+          });
+          }
+          function getFacebookId()
+          {
+          FB.api(
+          '/me/accounts',
+          'GET',
+          {},
+          function(response) {
+            console.log("fb")
+            const fbid=response.data[0].id
+            console.log(fbid)
+          }
+          );
+          }
+          function getInstagramId(){
+            FB.api(
+            '/106120181321696',
+            'GET',
+            {"fields":"instagram_business_account"},
+            function(response) {
+                // Insert your code here
+                console.log("Insta Id")
+                console.log(response.instagram_business_account.id)
+            }
+);
+          }
+          function getInstagramMedia()
+          {
+          FB.api(
+            '/17841402073114275/media',
+            'GET',
+            {},
+            function(response) {
+                // Insert your code here
+                console.log("media");
+                console.log(response)
+            }
+          );
+          }
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    </script>
+                
+          <fb:login-button 
+          scope="public_profile,email,pages_read_user_content,pages_show_list,instagram_basic"
+          onlogin="checkLoginState(),getFacebookId(),getInstagramId(),getInstagramMedia()">
+          </fb:login-button>    <div id="root"></div>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>
